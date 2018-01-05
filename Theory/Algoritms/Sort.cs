@@ -81,5 +81,47 @@ namespace Theory
                 return (asc && compare > 0) || (!asc && compare < 0);
             }
         }
+
+        // complexity = Θ(nlogn)
+        public static T[] Quick(T[] array)
+        {
+            sort(array, 0, array.Length - 1);
+
+            return array;
+
+            void sort(T[] arr, int min, int max)
+            {
+                if (min < max)
+                {
+                    var med = partition(arr, min, max);
+                    sort(arr, min, med - 1);
+                    sort(arr, med, max);
+                }
+            }
+
+            int partition(T[] arr, int min, int max)
+            {
+                var pivot = arr[(min + max) / 2];
+                var i = min;
+                var j = max;
+
+                while (i <= j)
+                {
+                    while (arr[i].CompareTo(pivot) < 0) ++i;
+                    while (arr[j].CompareTo(pivot) > 0) --j;
+
+                    if (i <= j)
+                    {
+                        var temp = arr[i];
+                        arr[i] = arr[j];
+                        arr[j] = temp;
+
+                        ++i; --j;
+                    }
+                }
+
+                return i;
+            }
+        }
     }
 }
