@@ -8,13 +8,13 @@ using System;
 
 namespace Theory
 {
-    internal class LinkedList<T> where T : IComparable<T>
+    internal class CircularLinkedList<T> where T : IComparable<T>
     {
-        private const string OutOfRangeMsg = "LinkedList: index={0} out of range or list is empty.";
+        private const string OutOfRangeMsg = "CircularLinkedList: index={0} out of range or list is empty.";
 
         private Node<T> head;
         private int count;
-        
+
         public int Count => count;
         
         public void Add(T data)
@@ -22,17 +22,12 @@ namespace Theory
             if (head == null)
             {
                 head = new Node<T>(data);
+                head.Next = head;
             }
             else
             {
-                var currentNode = head;
-
-                while (currentNode.Next != null)
-                {
-                    currentNode = currentNode.Next;
-                }
-
-                currentNode.Next = new Node<T>(data);
+                var lastNode = GetNodeAt(count - 1);
+                lastNode.Next = new Node<T>(data, lastNode.Next);
             }
 
             ++count;
@@ -46,26 +41,32 @@ namespace Theory
             }
 
             var currentNode = head;
-            Node<T> previousNode = null;
-            
-            while (currentNode != null && currentNode.Data.CompareTo(data) != 0)
+            var previousNode = GetNodeAt(count - 1);
+
+            for (var i = 0; i < count; ++i)
             {
+                if (currentNode.Data.CompareTo(data) == 0)
+                {
+                    if (count == 1)
+                    {
+                        head = null;
+                    }
+                    else
+                    {
+                        previousNode.Next = currentNode.Next;
+
+                        if (i == 0)
+                        {
+                            head = currentNode.Next;
+                        }
+                    }
+
+                    --count;
+                    break;
+                }
+
                 previousNode = currentNode;
                 currentNode = currentNode.Next;
-            }
-
-            if (currentNode != null)
-            {
-                if (previousNode != null)
-                {
-                    previousNode.Next = currentNode.Next;
-                }
-                else
-                {
-                    head = currentNode.Next;
-                }
-
-                --count;
             }
         }
 
@@ -73,7 +74,10 @@ namespace Theory
         {
             if (index == 0)
             {
-                head = new Node<T>(data, head);
+                var lastNode = GetNodeAt(count - 1);
+                lastNode.Next = new Node<T>(data, head);
+
+                head = lastNode.Next;
             }
             else
             {
@@ -92,18 +96,16 @@ namespace Theory
 
         private Node<T> GetNodeAt(int index)
         {
-            if (index >= count || index < 0 || head == null)
+            if (index < 0 || index >= count || head == null)
             {
                 throw (new IndexOutOfRangeException(String.Format(OutOfRangeMsg, index)));
             }
 
             var currentNode = head;
-            var currentCount = 0;
 
-            while (currentNode != null && currentCount != index)
+            for (var i = 0; i < count && i != index; ++i)
             {
                 currentNode = currentNode.Next;
-                ++currentCount;
             }
 
             return currentNode;
