@@ -8,7 +8,7 @@ using System;
 
 namespace Theory
 {
-    internal class LinkedList<T> where T : IComparable<T>
+    internal sealed class LinkedList<T> where T : IComparable<T>
     {
         private const string OutOfRangeMsg = "LinkedList: index={0} out of range or list is empty.";
 

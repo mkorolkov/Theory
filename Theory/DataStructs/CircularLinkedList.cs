@@ -8,7 +8,7 @@ using System;
 
 namespace Theory
 {
-    internal class CircularLinkedList<T> where T : IComparable<T>
+    internal sealed class CircularLinkedList<T> where T : IComparable<T>
     {
         private const string OutOfRangeMsg = "CircularLinkedList: index={0} out of range or list is empty.";
 
