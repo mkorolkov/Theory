@@ -6,10 +6,10 @@
 
 namespace Theory
 {
-    internal class Node<T>
+    internal sealed class Node<T>
     {
-        protected T data;
-        protected Node<T> next;
+        private T data;
+        private Node<T> next;
 
         public T Data
         {
