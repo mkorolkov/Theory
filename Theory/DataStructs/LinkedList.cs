@@ -90,6 +90,43 @@ namespace Theory
             set => GetNodeAt(index).Data = value;
         }
 
+        public void Reverse()
+        {
+            var current = head;
+            Node<T> previous = null;
+
+            while (current != null)
+            {
+                var next = current.Next;
+                current.Next = previous;
+                previous = current;
+                current = next;
+            }
+
+            head = previous;
+        }
+
+        // just for test
+        public void NotEffectiveReverse()
+        {
+            var i = 0;
+            var j = count - 1;
+
+            while (i < j)
+            {
+                var left = GetNodeAt(i);
+                var right = GetNodeAt(j);
+
+                Remove(left.Data);
+                Remove(right.Data);
+
+                Insert(i, right.Data);
+                Insert(j, left.Data);
+
+                ++i; --j;
+            }
+        }
+
         private Node<T> GetNodeAt(int index)
         {
             if (index >= count || index < 0 || head == null)
